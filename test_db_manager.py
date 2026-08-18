@@ -1,5 +1,7 @@
 from unittest.mock import MagicMock
+
 import pytest
+
 from db_manager import DBManager
 
 
@@ -30,9 +32,7 @@ def test_get_avg_velocity(mock_db_manager, monkeypatch):
     result = mock_db_manager.get_avg_velocity()
 
     assert result == 250.5
-    mock_cursor.execute.assert_called_once_with(
-        "SELECT AVG(velocity) FROM aeroplanes;"
-    )
+    mock_cursor.execute.assert_called_once_with("SELECT AVG(velocity) FROM aeroplanes;")
 
 
 def test_get_avg_velocity_empty(mock_db_manager, monkeypatch):
