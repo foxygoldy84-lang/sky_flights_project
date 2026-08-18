@@ -1,0 +1,79 @@
+# Скомпилированные файлы Python
+__pycache__/
+*.py[codz]
+*$py.class
+
+# Расширения C
+*.so
+
+# Файлы дистрибуции и сборки
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Логи инсталлятора
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Тесты, кэш и отчеты о покрытии кода
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py.cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Логи проекта
+*.log
+
+# Файлы pyenv
+.python-version
+
+# Зависимости PEP 582
+__pypackages__/
+
+# Виртуальные окружения (Обязательно скрываем локальный venv)
+.env
+.envrc
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Кэш статических анализаторов и линтеров, которые мы добавили
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+
+# Среда разработки PyCharm (Раскомментировано по твоему запросу)
+.idea/
+
+# Настройки конфигурации PyPI
+.pypirc
