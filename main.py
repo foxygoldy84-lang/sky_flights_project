@@ -14,6 +14,7 @@ DB_CONFIG = {
     "user": "postgres",
     "password": "Prostoparol",
 }
+
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
     "Accept": "*/*",
@@ -23,7 +24,7 @@ HEADERS = {
 
 def fetch_and_save_countries(country_names):
     """Находит координаты стран через Nominatim API и сохраняет их в БД."""
-    url = "https://nominatim.openstreetmap.org/search"
+    url = "https://openstreetmap.org"
     for name in country_names:
         print(f"\n[API] Ищу координаты для страны: {name}...")
         params = {"country": name, "format": "json", "limit": 1}
@@ -33,7 +34,7 @@ def fetch_and_save_countries(country_names):
             data = response.json()
             if not data:
                 continue
-            bbox = data[0].get("boundingbox")
+            bbox = data.get("boundingbox")
             if not bbox or len(bbox) < 4:
                 continue
 
@@ -72,41 +73,28 @@ def insert_mock_data():
                 if countries:
                     cur.execute("TRUNCATE TABLE aeroplanes RESTART IDENTITY;")
                     mock_planes = [
-                        (
-                            countries.get("Germany"),
-                            "1a2b3c",
-                            "DLH123",
-                            240.5,
-                            10000.0,
-                        ),
-                        (
-                            countries.get("Germany"),
-                            "4d5e6f",
-                            "DLH99A",
-                            180.0,
-                            7500.0,
-                        ),
-                        (
-                            countries.get("France"),
-                            "7g8h9i",
-                            "AFR456",
-                            250.0,
-                            11000.0,
-                        ),
-                        (
-                            countries.get("France"),
-                            "0j1k2l",
-                            "AFR777",
-                            150.2,
-                            5000.0,
-                        ),
-                        (
-                            countries.get("Poland"),
-                            "3m4n5o",
-                            "LOT888",
-                            210.3,
-                            9000.0,
-                        ),
+                        # 1. Германия
+                        (countries.get("Germany"), "1a2b3c", "DLH123", 240.5, 10000.0),
+                        (countries.get("Germany"), "4d5e6f", "DLH99A", 180.0, 7500.0),
+                        # 2. Франция
+                        (countries.get("France"), "7g8h9i", "AFR456", 250.0, 11000.0),
+                        (countries.get("France"), "0j1k2l", "AFR777", 150.2, 5000.0),
+                        # 3. Польша
+                        (countries.get("Poland"), "3m4n5o", "LOT888", 210.3, 9000.0),
+                        # 4. Испания
+                        (countries.get("Spain"), "6p7q8r", "IBE321", 225.0, 9500.0),
+                        # 5. Италия
+                        (countries.get("Italy"), "9s0t1u", "ITY444", 230.1, 10200.0),
+                        # 6. Великобритания
+                        (countries.get("United Kingdom"), "2v3w4x", "BAW555", 245.4, 10800.0),
+                        # 7. Нидерланды
+                        (countries.get("Netherlands"), "5y6z7a", "KLM789", 235.0, 9900.0),
+                        # 8. Бельгия
+                        (countries.get("Belgium"), "8b9c0d", "BEL111", 195.2, 8000.0),
+                        # 9. Австрия
+                        (countries.get("Austria"), "1e2f3g", "AUA222", 215.8, 8800.0),
+                        # 10. Швейцария
+                        (countries.get("Switzerland"), "4h5i6j", "SWR333", 220.0, 9200.0),
                     ]
                     cur.executemany(
                         """
@@ -116,7 +104,7 @@ def insert_mock_data():
                         mock_planes,
                     )
                     conn.commit()
-                    print("[Успех] Тестовые самолеты загружены.")
+                    print("[Успех] Тестовые самолеты для 10 стран загружены.")
     except Exception as e:
         print(f"[Ошибка теста] {e}")
 
@@ -125,10 +113,26 @@ def insert_mock_data():
 # ГЛАВНЫЙ ЗАПУСК ПРОГРАММЫ
 # ==========================================
 if __name__ == "__main__":
-    # Наполняем базу тестовыми данными
+    # Список из 10 стран для соответствия критериям
+    list_of_countries = [
+        "Germany",
+        "France",
+        "Poland",
+        "Spain",
+        "Italy",
+        "United Kingdom",
+        "Netherlands",
+        "Belgium",
+        "Austria",
+        "Switzerland",
+    ]
+
+    # Запускаем сбор 10 стран через API (если база пустая, один раз отработает)
+    # fetch_and_save_countries(list_of_countries)
+
+    # Наполняем базу тестовыми данными по 10 странам
     insert_mock_data()
 
-    # Создаем экземпляр менеджера из импортированного файла db_manager.py
     db_manager = DBManager(DB_CONFIG)
 
     # 1. Проверяем подсчет самолетов по странам
@@ -146,7 +150,7 @@ if __name__ == "__main__":
     print(f"\n3. Средняя скорость всех самолетов: {avg_speed} м/с")
 
     # 4. Проверяем поиск быстрых самолетов
-    print("\n4. Самолеты со скоростью выше средней:")
+    print("\n4. Самолеты со сокростью выше средней:")
     for plane in db_manager.get_high_velocity_aeroplanes():
         print(f"   Позывной: {plane[0]} | Скорость: {plane[1]} м/с")
 
