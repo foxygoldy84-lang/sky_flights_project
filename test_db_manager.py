@@ -48,14 +48,12 @@ def test_get_avg_velocity_empty(mock_db_manager, monkeypatch):
 
     result = mock_db_manager.get_avg_velocity()
 
-    # Наш код в менеджере должен перестраховаться и вернуть 0.0 вместо None
     assert result == 0.0
 
 
 def test_get_aeroplanes_by_keyword(mock_db_manager, monkeypatch):
     """Тест поиска самолетов по ключевому слову."""
     mock_cursor = MagicMock()
-    # Имитируем, что база нашла один самолет по запросу
     mock_cursor.fetchall.return_value = [("DLH123", 240.5, 10000.0)]
 
     mock_connect = MagicMock()
